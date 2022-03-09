@@ -10,13 +10,17 @@ public class QueueService implements Service {
 
     @Override
     public Resp process(Req req) {
-        Resp rsl;
+        Resp rsl = new Resp("", "204 No Content");
         if ("POST".equals(req.httpRequestType())) {
             queue.putIfAbsent(req.getSourceName(), new ConcurrentLinkedQueue<>());
             queue.get(req.getSourceName()).add(req.getParam());
-            rsl = new Resp(req.getSourceName(), "200");
-        } else {
-            String text = queue.get(req.getSourceName()).poll();
+            rsl = new Resp("", "200");
+        } else if ("GET".equals(req.httpRequestType())) {
+            ConcurrentLinkedQueue<String> qu = queue.get(req.getSourceName());
+            String text = "";
+            if (qu != null) {
+                text = qu.poll();
+            }
             rsl = new Resp(text, "200");
         }
         return rsl;

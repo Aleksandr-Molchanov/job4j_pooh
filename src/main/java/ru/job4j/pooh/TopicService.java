@@ -19,7 +19,7 @@ public class TopicService implements Service {
                     map.get(k).add(req.getParam());
                 }
             }
-            rsl = new Resp(req.getSourceName(), "200");
+            rsl = new Resp(req.getParam(), "200");
         } else if ("GET".equals(req.httpRequestType())) {
             topics.putIfAbsent(req.getSourceName(), new ConcurrentHashMap<>());
             ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> map =
