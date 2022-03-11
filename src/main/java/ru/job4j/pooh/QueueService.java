@@ -17,11 +17,13 @@ public class QueueService implements Service {
             rsl = new Resp("", "200");
         } else if ("GET".equals(req.httpRequestType())) {
             ConcurrentLinkedQueue<String> qu = queue.get(req.getSourceName());
-            String text = "";
+            String text;
             if (qu != null) {
                 text = qu.poll();
+                if (text != null) {
+                    rsl = new Resp(text, "200");
+                }
             }
-            rsl = new Resp(text, "200");
         }
         return rsl;
     }

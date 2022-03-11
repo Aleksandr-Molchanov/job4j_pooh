@@ -12,13 +12,7 @@ public class TopicService implements Service {
     public Resp process(Req req) {
         Resp rsl = new Resp("", "204");
         if ("POST".equals(req.httpRequestType())) {
-            ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> map =
-                    topics.get(req.getSourceName());
-            if (map != null) {
-                for (String k : map.keySet()) {
-                    map.get(k).add(req.getParam());
-                }
-            }
+            topics.get(req.getSourceName()).values().forEach(value -> value.add(req.getParam()));
             rsl = new Resp(req.getParam(), "200");
         } else if ("GET".equals(req.httpRequestType())) {
             topics.putIfAbsent(req.getSourceName(), new ConcurrentHashMap<>());
